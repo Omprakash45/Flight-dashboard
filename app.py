@@ -3,9 +3,7 @@ import pandas as pd
 import plotly.express as px
 from dbconnector import DB
 import streamlit.components.v1 as components
-import sys
-sys.path.append('C:\Users\aspire 7\Downloads\Telegram Desktop\data scince\projects\flight_dashboard\dbconnector.py')
-from dbconnector import DB
+
 
 
 # Initialize the database connection
