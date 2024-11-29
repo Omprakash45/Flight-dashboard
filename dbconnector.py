@@ -5,10 +5,11 @@ class DB:
         try:
             # Use PyMySQL for the connection
             self.conn = pymysql.connect(
-                host="localhost",
+                host="127.0.0.1",
                 user="root",
                 password="548017",  # Ensure this is your correct password
                 database="flights"
+                port="3306"
             )
             self.mycursor = self.conn.cursor()
             print("Connection established")
