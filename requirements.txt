@@ -12,3 +12,4 @@ faiss-cpu
 mysql-connector
 sqlalchemy
 plotly==5.10.0
+pymysql
