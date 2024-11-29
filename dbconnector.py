@@ -1,4 +1,4 @@
-import pymysql
+db.connector- import pymysql
 
 class DB:
     def __init__(self):
@@ -8,8 +8,8 @@ class DB:
                 host="127.0.0.1",
                 user="root",
                 password="548017",  # Ensure this is your correct password
-                database="flights",
-                port=3306
+                database="flights"
+                port="3306"
             )
             self.mycursor = self.conn.cursor()
             print("Connection established")
@@ -26,69 +26,61 @@ class DB:
         except pymysql.MySQLError as err:
             print(f"Error fetching cities: {err}")
             return []  # Return an empty list if an error occurs
-    
     def all_flights(self, source, destination):
-        """Fetch all flight details between source and destination."""
         self.mycursor.execute(
-            """SELECT FlightName, DepartingTime, ArrivingTime, Duration, Price FROM 
+            """select FlightName,DepartingTime,ArrivingTime,Duration,Price FROM 
             flight WHERE DepartingCity=%s AND ArrivingCity=%s""",
             (source, destination)
         )
         data = self.mycursor.fetchall()
         column_names = [i[0] for i in self.mycursor.description]
         return data, column_names
-
-    def get_avg_price_distribution(self, source, destination):
-        """Get the average price distribution for flights between source and destination."""
+    def get_avg_price_distribution(self,source,destination):
         self.mycursor.execute(
-            """SELECT FlightName, ROUND(AVG(Price), 2) AS Average_price FROM flight
+            """SELECT FlightName, round(avg(Price),2) as Average_price FROM flight
             WHERE DepartingCity=%s AND ArrivingCity=%s
-            GROUP BY FlightName""", (source, destination)
+             GROUP BY FlightName""",(source,destination)
         )
         data = self.mycursor.fetchall()
         column_names = [i[0] for i in self.mycursor.description]
         return data, column_names
-
-    def get_flight_frequency_per_airline(self, source, destination):
-        """Get the flight frequency per airline between source and destination."""
+    def get_flight_frequency_per_airline(self,source,destination):
         self.mycursor.execute(
-            """SELECT FlightName, COUNT(*) AS Frequency FROM flight
+            """SELECT FlightName, COUNT(*) as Frequency FROM flight
             WHERE DepartingCity=%s AND ArrivingCity=%s  
-            GROUP BY FlightName""", (source, destination)
+            GROUP BY FlightName""",((source,destination))
         )
         data = self.mycursor.fetchall()
         column_names = [i[0] for i in self.mycursor.description]
         return data, column_names    
-
-    def get_average_duration_per_airline(self, source, destination):
-        """Get the average duration per airline between source and destination."""
+    def get_average_duration_per_airline(self,source,destination):
         self.mycursor.execute(
-            """SELECT FlightName, AVG(Duration) AS AverageDuration FROM flight
+            """SELECT FlightName, AVG(Duration) as AverageDuration FROM flight
             WHERE DepartingCity=%s AND ArrivingCity=%s 
-            GROUP BY FlightName""", (source, destination)
+             GROUP BY FlightName""",(source,destination)
         )
         data = self.mycursor.fetchall()
         column_names = [i[0] for i in self.mycursor.description]
         return data, column_names
 
-    def get_peak_departure_times(self, source, destination):
-        """Get peak departure times between source and destination."""
+    def get_peak_departure_times(self,source,destination):
         self.mycursor.execute(
-            """SELECT DepartingTime, COUNT(*) AS Frequency FROM flight
-            WHERE DepartingCity=%s AND ArrivingCity=%s
-            GROUP BY DepartingTime""", (source, destination)
+            """SELECT DepartingTime, COUNT(*) as Frequency FROM flight
+             WHERE DepartingCity=%s AND ArrivingCity=%s
+            GROUP BY DepartingTime""",(source,destination)
         )
         data = self.mycursor.fetchall()
         column_names = [i[0] for i in self.mycursor.description]
         return data, column_names
 
     def get_price_by_departure_time(self, source, destination):
-        """Get price trend by departure time between source and destination."""
-        self.mycursor.execute(
-            """SELECT DepartingTime, AVG(Price) AS AveragePrice 
-            FROM flight WHERE DepartingCity=%s AND ArrivingCity=%s
+        self.mycursor.execute( """
+            SELECT DepartingTime, AVG(Price) as AveragePrice 
+            FROM flight
+            WHERE DepartingCity=%s AND ArrivingCity=%s
             GROUP BY DepartingTime
-            ORDER BY DepartingTime""", (source, destination)
+            ORDER BY DepartingTime
+        """,(source,destination)
         )
         data = self.mycursor.fetchall()
         column_names = [i[0] for i in self.mycursor.description]
