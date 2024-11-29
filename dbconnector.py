@@ -5,7 +5,7 @@ class DB:
         try:
             # Use PyMySQL for the connection
             self.conn = pymysql.connect(
-                host="127.0.0.1",
+                host="localhost",
                 user="root",
                 password="548017",  # Ensure this is your correct password
                 database="flights"
