@@ -3,7 +3,7 @@ import pandas as pd
 import plotly.express as px
 from dbconnector import DB
 import streamlit.components.v1 as components
-from utils.dbconnector import DB
+
 
 
 
