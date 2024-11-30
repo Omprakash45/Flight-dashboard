@@ -6,7 +6,7 @@ class DB:
         """Initialize the connection to the database and cursor."""
         try:
             self.conn = pymysql.connect(
-                host='127.0.0.1',  # Update with your DB host if different
+                host='localhost',  # Update with your DB host if different
                 user='root',  # Update with your DB username
                 password='548017',  # Update with your DB password
                 database='Flights'  # Update with your DB name
