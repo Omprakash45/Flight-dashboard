@@ -1,4 +1,5 @@
 import pymysql
+from pymysql import MySQLError
 
 class DB:
     def __init__(self):
