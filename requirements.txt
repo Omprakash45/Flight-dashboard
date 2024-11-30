@@ -13,3 +13,5 @@ mysql-connector
 sqlalchemy
 plotly==5.10.0
 pymysql
+google-cloud-aiplatform #this is required
+google-cloud-logging  #
