@@ -4,9 +4,6 @@ import plotly.express as px
 from dbconnector import DB
 import streamlit.components.v1 as components
 
-
-
-
 # Initialize the database connection
 db = DB()
 
@@ -28,42 +25,46 @@ if user_input == "Check flights":
     st.title("Flights")
     st.header("Enter source and destination from dropdown")
     
-    col1, col2 = st.columns(2)
-    with col1:
-        source = st.selectbox("Source", cities)
-    with col2:
-        destination = st.selectbox("Destination", cities)
-    
-    if source and destination:
-        st.write(f"Showing available flights from {source} to {destination}.")
-    
-    if st.button("Search"):
-        result, column_names = db.all_flights(source, destination)
+    if cities:
+        col1, col2 = st.columns(2)
+        with col1:
+            source = st.selectbox("Source", cities)
+        with col2:
+            destination = st.selectbox("Destination", cities)
 
-        # Convert the result to a dataframe
-        df = pd.DataFrame(result, columns=column_names)
-        st.dataframe(df)     
+        if source and destination:
+            st.write(f"Showing available flights from {source} to {destination}.")
+
+        if st.button("Search"):
+            with st.spinner('Fetching flight data...'):
+                result, column_names = db.all_flights(source, destination)
+
+            if result:
+                df = pd.DataFrame(result, columns=column_names)
+                st.dataframe(df)     
+            else:
+                st.write("No flights found for the selected route.")
 
 elif user_input == "Choose one":
     st.title("About The Dashboard")
     try:
         with open("about.html", "r") as f:
             html_content = f.read()
-        # Display the HTML content using components.html
         components.html(html_content, height=600, scrolling=True)
     except FileNotFoundError:
-        st.error("The 'about.html' file was not found. Please ensure it exists in the application directory.")        
+        st.error("The 'about.html' file was not found. Please ensure it exists in the application directory.")
 
 elif user_input == "Flights analytics":
     st.title("Analytics")
     
+    # Get cities once
+    cities = db.source_city()
+
     col1, col2 = st.columns(2)
     with col1:
-        city = db.source_city()
-        source = st.selectbox("Source", city)
+        source = st.selectbox("Source", cities)
     with col2:
-        city = db.source_city()
-        destination = st.selectbox("Destination", city)
+        destination = st.selectbox("Destination", cities)
     
     # Price Distribution
     st.header('Price Distribution')
@@ -77,7 +78,6 @@ elif user_input == "Flights analytics":
     result, column_names = db.get_flight_frequency_per_airline(source, destination)
     df = pd.DataFrame(result, columns=column_names)
 
-    # Create pie chart
     fig = px.pie(df, names='FlightName', values='Frequency', title='Flight Frequency per Airline')
     st.plotly_chart(fig)
 
