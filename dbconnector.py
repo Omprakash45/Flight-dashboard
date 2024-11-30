@@ -3,19 +3,19 @@ from pymysql import MySQLError
 
 class DB:
     def __init__(self):
-        try:
-            self.conn = pymysql.connect(
-                host="127.0.0.1",
-                user="root",
-                password="548017",
-                database="flights",
-                port=3306
-            )
-            self.mycursor = self.conn.cursor()
-            print("Connection established")
-        except pymysql.MySQLError as err:
-            print(f"Connection error: {err}")
-            raise
+      
+
+try:
+    self.conn = pymysql.connect(
+        host='127.0.0.1',
+        user='root',
+        password='548017',
+        database='Flights'
+    )
+except MySQLError as e:
+    print(f"Error connecting to MySQL: {e}")
+    # Handle or raise exception further if needed
+
 
     def source_city(self):
         try:
