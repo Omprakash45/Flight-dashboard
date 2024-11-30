@@ -5,7 +5,11 @@ from dbconnector import DB
 import streamlit.components.v1 as components
 
 # Initialize the database connection
-db = DB()
+try:
+    db = DB()  # This will trigger connection and cursor initialization
+except Exception as e:
+    st.error(f"Error connecting to the database: {e}")
+    st.stop()  # Stop execution if database connection fails
 
 # Get the list of cities once
 try:
@@ -100,5 +104,5 @@ elif user_input == "Flights analytics":
     st.header("Price Trend By Time Of The Day")
     result, column_names = db.get_price_by_departure_time(source, destination)
     df = pd.DataFrame(result, columns=column_names)
-    fig = px.line(df, x='DepartingTime', y='AveragePrice', title=f'Price trends by departure time from {source} to {destination}')
+    fig = px.line(df, x='DepartingTime', y='AveragePrice', title=f'Price trends for flights from {source} to {destination}')
     st.plotly_chart(fig)
